@@ -1,7 +1,7 @@
 {
   "name": "ai-titan-silicon-empire",
   "private": true,
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "AI Titan: Silicon Empire — An interactive AI company tycoon simulation game",
   "author": "AI Titan Studios",
   "type": "module",

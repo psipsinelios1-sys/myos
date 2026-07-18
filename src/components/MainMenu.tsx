@@ -484,7 +484,7 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
 
                       // Fallback: Web fetch check (requires public repo)
                       try {
-                        const response = await fetch("https://raw.githubusercontent.com/Psipsinelios/myos/main/package.json");
+                        const response = await fetch("https://raw.githubusercontent.com/psipsinelios1-sys/myos/main/package.json");
                         if (!response.ok) {
                           throw new Error(`HTTP Error ${response.status}`);
                         }
