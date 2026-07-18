@@ -1,0 +1,6 @@
+{
+  "name": "AI Titan: Silicon Empire",
+  "description": "An interactive AI company tycoon simulation game where you build hardware clusters, manage talent, train models, handle public sentiment, and dominate the Silicon Valley AI race.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

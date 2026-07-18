@@ -1,0 +1,36 @@
+{
+  "name": "ai-titan-silicon-empire",
+  "private": true,
+  "version": "1.2.4",
+  "description": "AI Titan: Silicon Empire — An interactive AI company tycoon simulation game",
+  "author": "AI Titan Studios",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "preview": "vite preview",
+    "clean": "node -e \"const fs=require('fs'); ['dist', 'src-tauri/target', 'src-tauri/gen'].forEach(p => fs.rmSync(p, {recursive: true, force: true}))\"",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.10.0",
+    "@tailwindcss/vite": "^4.3.2",
+    "@tauri-apps/api": "^2.11.1",
+    "@vitejs/plugin-react": "^6.0.3",
+    "dotenv": "^17.4.2",
+    "lucide-react": "^1.23.0",
+    "motion": "^12.42.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "recharts": "^3.9.2",
+    "vite": "^8.1.5"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^7.0.0"
+  }
+}

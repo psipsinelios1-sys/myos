@@ -1,0 +1,578 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* High Density Colors Theme Overwrite */
+  --color-slate-950: #060709; /* Pitch black page background */
+  --color-slate-900: #0f1115; /* Main cards and container panels */
+  --color-slate-850: #171920; /* Inner rows, list cells, tertiary borders */
+  --color-slate-800: #232731; /* Primary crisp grey border color */
+  --color-slate-700: #353b49; /* Lighter grey outline */
+  
+  --color-cyan-400: #00D1FF;  /* High Density electric cyan highlight */
+  --color-cyan-300: #7FE8FF;
+  --color-cyan-500: #00A6CC;
+  
+  --color-indigo-400: #818cf8; /* True gorgeous electric indigo */
+  --color-indigo-300: #a5b4fc;
+  --color-indigo-500: #6366f1;
+  --color-indigo-950: #1e1b4b;
+  
+  --color-purple-400: #c084fc; /* True gorgeous modern purple */
+  --color-purple-300: #d8b4fe;
+  --color-purple-500: #a855f7;
+  --color-purple-950: #3b0764;
+
+  --color-emerald-400: #10b981; /* High Density electric green */
+  --color-emerald-500: #059669;
+  --color-emerald-300: #6ee7b7;
+
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Beautiful fluid rounded panels for modern high-tech dashboard aesthetics */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  --animate-pulse-orange: pulse-orange 2s infinite ease-in-out;
+  --animate-pulse-red: pulse-red 1.5s infinite ease-in-out;
+  --animate-glow-amber: glow-amber 2s infinite alternate ease-in-out;
+
+  @keyframes pulse-orange {
+    0%, 100% { 
+      box-shadow: 0 0 4px rgba(249, 115, 22, 0.2), inset 0 0 2px rgba(249, 115, 22, 0.1); 
+      border-color: rgba(249, 115, 22, 0.3); 
+    }
+    50% { 
+      box-shadow: 0 0 16px rgba(249, 115, 22, 0.55), inset 0 0 8px rgba(249, 115, 22, 0.25); 
+      border-color: rgba(249, 115, 22, 0.8); 
+    }
+  }
+
+  @keyframes pulse-red {
+    0%, 100% { 
+      background-color: rgba(220, 38, 38, 0.05); 
+      border-color: rgba(220, 38, 38, 0.35); 
+    }
+    50% { 
+      background-color: rgba(220, 38, 38, 0.25); 
+      border-color: rgba(220, 38, 38, 0.8); 
+    }
+  }
+
+  @keyframes glow-amber {
+    0% { 
+      filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.3)); 
+    }
+    100% { 
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.85)); 
+    }
+  }
+}
+
+/* Base style corrections for dense corporate aesthetic */
+* {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+body {
+  background-color: #050608 !important;
+  color: #F1F5F9 !important;
+  font-family: var(--font-sans);
+}
+
+/* Layout density improvements */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Custom modern polished element guidelines */
+button {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Thin high contrast scrollbars for tech instrument monitors */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050608;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00D1FF;
+}
+
+/* Clean cyber-accents with border gradients and highlights */
+.glass-panel {
+  background: rgba(15, 17, 21, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 1rem;
+}
+
+.glowing-cyan {
+  box-shadow: 0 0 15px rgba(0, 209, 255, 0.15);
+}
+
+.glowing-lime {
+  box-shadow: 0 0 15px rgba(217, 255, 0, 0.15);
+}
+
+.glowing-purple {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+}
+
+/* Left-border colored ticks for live reports and social threads inside lists */
+div[class*="border-rose-900"] {
+  border-left: 4px solid #f43f5e !important;
+}
+div[class*="border-amber-900"] {
+  border-left: 4px solid #f59e0b !important;
+}
+div[class*="border-cyan-900"] {
+  border-left: 4px solid #00D1FF !important;
+}
+div[class*="border-emerald-900"] {
+  border-left: 4px solid #10b981 !important;
+}
+
+/* Select indicators */
+select {
+  border-radius: 0.5rem !important;
+  border-color: #232731 !important;
+  background-color: #060709 !important;
+}
+select:focus {
+  border-color: #00D1FF !important;
+}
+
+/* Input structures */
+input[type="text"], input[type="number"], input[type="range"] {
+  border-radius: 0.5rem !important;
+}
+
+/* Active Tab overrides link styling */
+button[id^="tab_"][class*="bg-slate-950"] {
+  background-color: #0f1115 !important;
+  color: #00D1FF !important;
+  border-color: #232731 !important;
+  border-top: 2px solid #00D1FF !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+/* --- VIEWPORT LAYOUT LOCK & HUD COMPACTION --- */
+
+/* Title bar offset: set by JS when Electron title bar is present */
+:root {
+  --titlebar-h: 0px;
+}
+
+/* Force all root layers to fit exactly within 100vh height and disable page scroll */
+html, body, #root, div[class*="min-h-screen"] {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Force primary main container to take exact remaining height with zero page scroll */
+main {
+  height: calc(100vh - 115px - var(--titlebar-h)) !important;
+  min-height: calc(100vh - 115px - var(--titlebar-h)) !important;
+  max-height: calc(100vh - 115px - var(--titlebar-h)) !important;
+  overflow: hidden !important;
+  padding: 1rem 1.5rem !important;
+  gap: 1.25rem !important;
+}
+
+/* Ensure the main grid layout supports exact heights and nested layout */
+main.grid {
+  grid-template-rows: 100% !important;
+}
+
+/* Left/Main content area - span-9 */
+div[class*="lg:col-span-9"] {
+  height: 100% !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Active tab screen containers inside left area */
+div[class*="lg:col-span-9"] > div:not([class*="p-1"]) {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding-right: 0.25rem !important;
+}
+
+/* Active tab selector bar - prevent stretching */
+div[class*="lg:col-span-9"] > div[class*="p-1"] {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: auto !important;
+  overflow: visible !important;
+}
+
+/* Allow subcomponents layout to expand and fill available height with internal scrollbar */
+div[class*="space-y-6"].lg\:col-span-9 > div:not([class*="p-1"]) {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding-right: 0.25rem !important;
+}
+
+/* Ensure Talent Marketplace, Dynamic Sentinel Feed, Active Roster and Terminal Logs have exact max-height / overflow bindings */
+/* Terminal logs right block (col-span-3) */
+div[class*="lg:col-span-3"] {
+  height: 100% !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+div[class*="lg:col-span-3"] > div {
+  height: 100% !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+div[class*="lg:col-span-3"] div[class*="overflow-y-auto"] {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  max-height: none !important;
+}
+
+/* Force specific scroll boundaries for candidates feed and commentaries */
+div[class*="overflow-y-auto"] {
+  scrollbar-width: thin !important;
+}
+
+/* Custom ambient breathing cyberpunk animation colors and indicators */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(129, 140, 248, 0.15), inset 0 0 4px rgba(129, 140, 248, 0.05);
+    border-color: rgba(129, 140, 248, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(129, 140, 248, 0.4), inset 0 0 8px rgba(129, 140, 248, 0.2);
+    border-color: rgba(129, 140, 248, 0.6);
+  }
+}
+
+@keyframes matrixFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes textNeon {
+  0%, 100% { text-shadow: 0 0 4px rgba(0, 209, 255, 0.2); }
+  50% { text-shadow: 0 0 12px rgba(0, 209, 255, 0.6), 0 0 20px rgba(0, 209, 255, 0.3); }
+}
+
+.glow-card-indigo {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+.float-animation {
+  animation: matrixFloat 6s infinite ease-in-out;
+}
+
+.text-neon-cyan {
+  animation: textNeon 3s infinite ease-in-out;
+}
+
+/* Gorgeous custom card border glows */
+.border-glow-cyan {
+  border-color: rgba(0, 209, 255, 0.45) !important;
+  box-shadow: 0 0 12px rgba(0, 209, 255, 0.2);
+}
+.border-glow-purple {
+  border-color: rgba(168, 85, 247, 0.45) !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+}
+.border-glow-emerald {
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+.border-glow-indigo {
+  border-color: rgba(99, 102, 241, 0.45) !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/* ENHANCED DASHBOARD CARD SYSTEM                         */
+/* ═══════════════════════════════════════════════════════ */
+
+/* Dot grid background pattern */
+.dot-grid-bg {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Dashboard card base */
+.dash-card {
+  --accent: #c084fc;
+  position: relative;
+  overflow: hidden;
+  background: rgba(10, 12, 16, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 1.25rem;
+  padding: 1.15rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 135px; /* Slightly taller for higher density content layout */
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.02);
+}
+
+/* Ensure card children render above pseudo-elements */
+.dash-card > * {
+  position: relative;
+  z-index: 5;
+}
+
+.dash-card:hover {
+  background: rgba(16, 20, 28, 0.75);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow:
+    0 0 35px color-mix(in srgb, var(--accent) 15%, transparent),
+    0 12px 30px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px color-mix(in srgb, var(--accent) 20%, transparent);
+  transform: translateY(-3px) scale(1.01);
+}
+
+/* Featured card style upgrades */
+.dash-card-featured {
+  height: 145px !important;
+}
+
+/* Top accent gradient line */
+.dash-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.15;
+  transition: opacity 0.4s ease, height 0.3s ease;
+  z-index: 2;
+}
+
+.dash-card:hover::before {
+  opacity: 0.95;
+  height: 4px;
+}
+
+/* Shimmer sweep effect */
+.dash-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.01) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.01) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dash-card:hover::after {
+  animation: cardShimmer 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardShimmer {
+  0% { left: -50%; }
+  100% { left: 150%; }
+}
+
+/* Auto-style icons within dash-card (targets lucide SVGs) */
+.dash-card > div:first-child > svg {
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: content-box !important;
+  flex-shrink: 0;
+}
+
+.dash-card:hover > div:first-child > svg {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 25%, transparent);
+  transform: rotate(5deg) scale(1.05);
+}
+
+/* Scanline ambient effect */
+@keyframes scanDown {
+  0% { top: -15%; }
+  100% { top: 115%; }
+}
+
+.scanline-ambient::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 209, 255, 0.018), transparent);
+  animation: scanDown 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* CEO avatar gradient ring */
+.avatar-ring {
+  position: relative;
+}
+
+.avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c084fc, #818cf8, #00D1FF);
+  opacity: 0.6;
+  z-index: 0;
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+
+.avatar-ring > div {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1.01); }
+  50% { opacity: 0.8; transform: scale(1.04); }
+}
+
+/* CTA button shine */
+.cta-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  animation: ctaShine 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ctaShine {
+  0% { left: -100%; }
+  30% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/* PREMIUM GLOWING PROGRESS SYSTEMS                       */
+/* ═══════════════════════════════════════════════════════ */
+
+.glow-bar-container {
+  background: rgba(15, 17, 21, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.glow-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  position: relative;
+  box-shadow: 0 0 12px var(--glow-color, rgba(0, 209, 255, 0.4));
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 8px 8px;
+  animation: progressStripeMove 1.5s linear infinite;
+  border-radius: inherit;
+}
+
+@keyframes progressStripeMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 16px 0; }
+}
+
+/* Terminal & matrix grid fx */
+.matrix-glow-text {
+  text-shadow: 0 0 4px var(--neon-color, #00D1FF);
+}
+
+.neon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--dot-color, #00D1FF);
+  box-shadow: 0 0 8px 1px var(--dot-color, #00D1FF);
+}
+
+.neon-dot-pulse {
+  animation: neonDotPulseAnim 1.6s infinite ease-in-out;
+}
+
+@keyframes neonDotPulseAnim {
+  0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 6px var(--dot-color, #00D1FF); }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px var(--dot-color, #00D1FF); }
+}
+
+
