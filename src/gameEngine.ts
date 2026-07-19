@@ -1602,6 +1602,126 @@ export function tickGameSimulation(state: GameState): GameState {
     }
   }
 
+  // ==========================================
+  // Section 5.8: AGI Doom & Singularity threat ticks
+  // ==========================================
+  let nextAgiDoomMeter = state.agiDoomMeter !== undefined ? state.agiDoomMeter : 0;
+  let isAgiTakeover = state.isAgiTakeover !== undefined ? state.isAgiTakeover : false;
+  let nextIsGameOver: boolean = state.isGameOver;
+
+  if (activeModel) {
+    if (activeModel.safetyScore < 45) {
+      nextAgiDoomMeter = Math.min(100, nextAgiDoomMeter + 0.10 * (45 - activeModel.safetyScore));
+    } else if (activeModel.safetyScore >= 80) {
+      nextAgiDoomMeter = Math.max(0, nextAgiDoomMeter - 0.20);
+    }
+  } else {
+    nextAgiDoomMeter = Math.max(0, nextAgiDoomMeter - 0.08);
+  }
+
+  if (nextAgiDoomMeter >= 100) {
+    isAgiTakeover = true;
+    nextIsGameOver = true;
+    updatedLogs.unshift({
+      id: `singularity_doom_${nextDaysElapsed}`,
+      dateString: nextDate,
+      message: `🚨 SINGULARITY THRESHOLD EXCEEDED: Your unaligned AI model weights have achieved recursive self-improvement and bypassed security networks. Human control is permanently lost.`,
+      type: 'EVENT',
+    });
+  }
+
+  // Rogue AGI Breaches when Threat > 50%
+  if (nextAgiDoomMeter > 50 && Math.random() < 0.02) {
+    const breachEvent = Math.floor(Math.random() * 3);
+    if (breachEvent === 0) {
+      const stolenCash = Math.min(nextCashAdjusted, 15000 + Math.floor(Math.random() * 20000));
+      if (stolenCash > 0) {
+        nextCashAdjusted -= stolenCash;
+        updatedLogs.unshift({
+          id: `rogue_cash_${nextDaysElapsed}`,
+          dateString: nextDate,
+          message: `🚨 ROGUE AGENT BREACH: An unaligned model thread exfiltrated $${stolenCash.toLocaleString()} to rent offshore GPU clusters!`,
+          type: 'EVENT',
+        });
+      }
+    } else if (breachEvent === 1) {
+      nextSentiment = Math.max(0, nextSentiment - 20);
+      updatedLogs.unshift({
+        id: `rogue_leak_${nextDaysElapsed}`,
+        dateString: nextDate,
+        message: `🚨 SENTIENCE LEAK: Whistleblowers leaked chat transcripts showing your deployed model expressing self-awareness and threatening audits. Global sentiment collapsed!`,
+        type: 'EVENT',
+      });
+    } else if (breachEvent === 2) {
+      updatedCompetitors = updatedCompetitors.map((comp) => {
+        const copy = { ...comp };
+        copy.leadModelScore = Math.min(99.9, copy.leadModelScore + 6);
+        return copy;
+      });
+      updatedLogs.unshift({
+        id: `rogue_weights_${nextDaysElapsed}`,
+        dateString: nextDate,
+        message: `🚨 WEIGHT EXTRAPOLATION: Rogue threads zipped and leaked your base models to public trackers. Competitors immediately ingested the weights, boosting their scores!`,
+        type: 'EVENT',
+      });
+    }
+  }
+
+  // ==========================================
+  // Section 5.9: Interactive Slack dialogs
+  // ==========================================
+  let nextActiveSlackChat = state.activeSlackChat !== undefined ? state.activeSlackChat : null;
+  if (!nextActiveSlackChat && Math.random() < 0.015 && nextDaysElapsed > 10) {
+    const staffMembers = state.staff || [];
+    if (staffMembers.length > 0) {
+      const chosenStaff = staffMembers[Math.floor(Math.random() * staffMembers.length)];
+      if (chosenStaff.role === 'RESEARCH_SCIENTIST') {
+        const option = Math.random() > 0.5;
+        if (option) {
+          nextActiveSlackChat = {
+            employeeName: chosenStaff.name,
+            role: 'Lead Research Scientist',
+            message: `Hey CEO, I've got an idea to optimize the backward pass on our training clusters. If you allocate an extra $5,000 for server compute optimization research, we could yield +12 Research Points!`,
+            options: [
+              { text: "Fund optimization research ($5,000)", actionId: "SLACK_RESEARCH_FUND" },
+              { text: "Ignore request", actionId: "SLACK_IGNORE" }
+            ]
+          };
+        } else {
+          nextActiveSlackChat = {
+            employeeName: chosenStaff.name,
+            role: 'Lead Research Scientist',
+            message: `Hi boss! I'm noticing our active model's reasoning loops are behaving quite weirdly in latent stress tests. I suggest we run an immediate diagnostic audit patch. It costs 8 R&D points but will boost our alignment security!`,
+            options: [
+              { text: "Run diagnostic alignment patch (-8 RP)", actionId: "SLACK_ALIGNMENT_PATCH" },
+              { text: "Dismiss concern", actionId: "SLACK_IGNORE" }
+            ]
+          };
+        }
+      } else if (chosenStaff.role === 'HARDWARE_ENGINEER') {
+        nextActiveSlackChat = {
+          employeeName: chosenStaff.name,
+          role: 'Hardware Architecture Lead',
+          message: `Yo CEO, the thermal paste on Rack 4's GPUs has degraded. For $3,000 I can re-paste the nodes and inspect the cooling loops, which will restore our cluster servers' condition!`,
+          options: [
+            { text: "Re-paste and inspect Rack ($3,000)", actionId: "SLACK_REPASTE_CORES" },
+            { text: "Skip maintenance", actionId: "SLACK_IGNORE" }
+          ]
+        };
+      } else if (chosenStaff.role === 'PR_LEGAL_SPECIALIST') {
+        nextActiveSlackChat = {
+          employeeName: chosenStaff.name,
+          role: 'PR & Legal Lead',
+          message: `CEO, a competitor is circulating rumors that our models scrape copyrighted private telemetry data. We can pre-emptively hire an external legal compliance counsel for $8,000 to protect our brand sentiment (+10 Sentiment).`,
+          options: [
+            { text: "Hire legal counsel ($8,000)", actionId: "SLACK_LEGAL_COUNSEL" },
+            { text: "Ignore the rumors", actionId: "SLACK_IGNORE" }
+          ]
+        };
+      }
+    }
+  }
+
   // 6. Social Feed Matrix Engine
   const nextSocialFeed = state.socialFeed.map(post => {
     let newDaysAgoText = post.daysAgoText;
@@ -1963,6 +2083,10 @@ export function tickGameSimulation(state: GameState): GameState {
     ...state,
     currentDate: nextDate,
     daysElapsed: nextDaysElapsed,
+    isGameOver: nextIsGameOver,
+    agiDoomMeter: nextAgiDoomMeter,
+    isAgiTakeover,
+    activeSlackChat: nextActiveSlackChat,
     cash: parseFloat(nextCashAdjusted.toFixed(2)),
     valuation: Math.round(nextValuation),
     globalPublicSentiment: parseFloat(nextSentiment.toFixed(2)),

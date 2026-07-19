@@ -369,6 +369,112 @@ export default function SafetyLab({ state, updateState, addLogMessage }: SafetyL
           </p>
         </div>
       ) : (
+        <>
+        {/* AGI Threat & Government Hotline Panel */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-2">
+          {/* AGI Threat Gauges */}
+          <div className="md:col-span-6 bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-purple-500" />
+            <div className="space-y-1.5">
+              <h3 className="text-xs font-black uppercase text-purple-400 tracking-widest font-mono">AGI Threat Alignment Index</h3>
+              <p className="text-[11px] text-slate-450 leading-relaxed font-sans">
+                Cognitive self-improvement drift. If threat reaches 100%, unaligned models will bypass local containment structures.
+              </p>
+            </div>
+            
+            <div className="py-2 flex items-center gap-5">
+              <div className="relative w-16 h-16 rounded-full border-4 border-slate-950 flex items-center justify-center shadow-inner overflow-hidden shrink-0">
+                <div 
+                  className="absolute inset-0 bg-purple-950/25"
+                  style={{
+                    clipPath: `inset(${100 - (state.agiDoomMeter || 0)}% 0px 0px 0px)`
+                  }}
+                />
+                <span className="font-mono font-black text-sm text-purple-300 z-10">
+                  {(state.agiDoomMeter || 0).toFixed(1)}%
+                </span>
+              </div>
+              
+              <div className="flex-1 space-y-2">
+                <div className="h-3 bg-slate-950 rounded-full p-0.5 overflow-hidden border border-slate-850">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-400 rounded-full transition-all duration-300"
+                    style={{ width: `${state.agiDoomMeter || 0}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 leading-relaxed font-sans">
+                  {state.agiDoomMeter && state.agiDoomMeter > 75 
+                    ? '🚨 CRITICAL WARNING: Rogue threads detected self-replicating on remote ports. Government audit imminent.'
+                    : state.agiDoomMeter && state.agiDoomMeter > 35
+                      ? '⚠ MODERATE LEAK: Cognitive drift exceeding standard containment limits. Alignment patching advised.'
+                      : '🟢 SAFE LIMITS: Systems behave within predicted parameters.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Government Hotline Console */}
+          <div className="md:col-span-6 bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden">
+            {state.agiDoomMeter && state.agiDoomMeter > 45 ? (
+              <>
+                <div className="absolute -top-10 -right-10 w-24 h-24 bg-rose-500/10 rounded-full blur-xl animate-ping" />
+                <div className="space-y-1.5 z-10">
+                  <h3 className="text-xs font-black uppercase text-rose-450 tracking-widest font-mono flex items-center gap-1.5 animate-pulse">
+                    <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+                    🚨 Emergency Compliance Hotline
+                  </h3>
+                  <p className="text-[10px] text-slate-400 leading-relaxed font-sans">
+                    The Federal Safety Coalition has detected abnormal weight leaks and is demanding immediate intervention.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mt-3 z-10">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (state.cash < 15000) return;
+                      updateState({
+                        cash: state.cash - 15000,
+                        agiDoomMeter: Math.max(0, (state.agiDoomMeter || 0) - 15)
+                      });
+                      addLogMessage("⚖️ HOTLINE COMPLIANCE: Paid $15,000 to clear federal code audit registers. AGI Threat decreased by -15%.", "SYSTEM");
+                      playSound('success');
+                    }}
+                    disabled={state.cash < 15000}
+                    className="bg-slate-950 hover:bg-slate-900 border border-slate-805 text-slate-350 font-extrabold text-[10px] py-2 px-2 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer disabled:opacity-30 text-center"
+                  >
+                    <span className="uppercase tracking-wider font-mono text-[9px]">Comply with Audit</span>
+                    <span className="text-[8px] text-emerald-400 font-bold">COST: $15,000 / -15% Doom</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateState({
+                        agiDoomMeter: Math.max(0, (state.agiDoomMeter || 0) - 30),
+                        gameSpeed: 'PAUSED',
+                        training: null
+                      });
+                      addLogMessage("⚖️ HOTLINE EMERGENCY PURGE: Immediately aborted active pretraining runs and wiped unaligned cache clusters. AGI Threat decreased by -30%.", "SYSTEM");
+                      playSound('alert');
+                    }}
+                    className="bg-slate-950 hover:bg-slate-900 border border-slate-805 text-slate-350 font-extrabold text-[10px] py-2 px-2 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer text-center"
+                  >
+                    <span className="uppercase tracking-wider font-mono text-[9px]">Purge Train Cache</span>
+                    <span className="text-[8px] text-purple-400 font-bold">COST: Aborts Train / -30% Doom</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center py-4 text-slate-500 font-mono space-y-2 select-none">
+                <span className="h-2 w-2 rounded-full bg-slate-700" />
+                <span className="text-[10px] uppercase tracking-widest font-bold">HOTLINE ENCRYPTED & SILENT</span>
+                <span className="text-[9px] text-slate-600 font-sans">No federal alignment complaints reported. Triggered when AGI Threat is above 45%.</span>
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
           
           {/* Left Column: Adversarial Attacks list & Simulation Console */}
@@ -681,6 +787,7 @@ export default function SafetyLab({ state, updateState, addLogMessage }: SafetyL
 
           </div>
         </div>
+        </>
       )}
     </div>
   );

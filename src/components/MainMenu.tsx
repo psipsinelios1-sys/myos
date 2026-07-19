@@ -490,7 +490,7 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
                         }
                         const remoteData = await response.json();
                         const remoteVersion = remoteData.version;
-                        const localVersion = "1.2.4";
+                        const localVersion = "1.2.5";
 
                         setUpdateMsg(`RESOLVED REMOTE: v${remoteVersion}\nLOCAL: v${localVersion}`);
                         

@@ -421,6 +421,18 @@ export interface RegulatoryMandate {
   status: 'ACTIVE' | 'PASSED' | 'DEFEATED';
 }
 
+export interface SlackChatOption {
+  text: string;
+  actionId: string;
+}
+
+export interface SlackChat {
+  employeeName: string;
+  role: string;
+  message: string;
+  options: SlackChatOption[];
+}
+
 export interface GameState {
   // Game Controls
   // Controls & Basics
@@ -428,6 +440,9 @@ export interface GameState {
   daysElapsed: number;
   gameSpeed: GameSpeed;
   isGameOver: boolean;
+  agiDoomMeter?: number;
+  isAgiTakeover?: boolean;
+  activeSlackChat?: SlackChat | null;
   companyName?: string;
   brandThemeColor?: BrandThemeColor;
   businessStrategy?: BusinessStrategy;

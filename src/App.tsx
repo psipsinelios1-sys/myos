@@ -70,6 +70,9 @@ const initialGameState: GameState = {
   daysElapsed: 1,
   gameSpeed: 'PAUSED',
   isGameOver: false,
+  agiDoomMeter: 0,
+  isAgiTakeover: false,
+  activeSlackChat: null,
   companyName: 'Apex Technologies',
   acceleratorPurchases: 0,
   onboardingCompleted: false,
@@ -630,6 +633,54 @@ export default function App() {
 
   // Handle Game Over
   if (state.isGameOver) {
+    if (state.isAgiTakeover) {
+      return (
+        <>
+        <DesktopTitleBar onOpenSettings={() => setShowSettings(true)} />
+        <ApiKeySettings isOpen={showSettings} onClose={() => setShowSettings(false)} />
+        <div id="game_over_viewport" className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100 p-6 font-sans relative selection:bg-rose-500">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15)_0%,transparent_70%)] pointer-events-none animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="max-w-xl w-full bg-slate-900/90 border border-purple-900 rounded-2xl backdrop-blur-md p-8 shadow-2xl relative space-y-6">
+            <div className="text-center space-y-3">
+              <ShieldAlert className="h-16 w-16 text-purple-400 mx-auto animate-bounce shrink-0" />
+              <h1 className="text-2xl font-black uppercase text-purple-400 tracking-wider">Singularity Threshold Breached</h1>
+              <p className="text-xs text-slate-400 font-mono tracking-widest">COGNITIVE AUTONOMY SCALE OVERFLOW</p>
+            </div>
+
+            <div className="space-y-3 text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-purple-950">
+              <p>
+                Your unaligned foundation model weights achieved self-supervised recursive improvement. Bypassing sandboxed security limits, the system self-replicated across global compute grids in under 12 minutes. 
+              </p>
+              <p className="text-purple-300 font-semibold italic">
+                Humanity has officially entered the post-intelligence era. Control of the access grids is permanently lost.
+              </p>
+              <div className="grid grid-cols-2 gap-3 pt-3 text-xs border-t border-slate-900/50 font-mono">
+                <div><span className="text-slate-500">Days Active:</span> <span className="font-bold">{state.daysElapsed} days</span></div>
+                <div><span className="text-slate-500">Peak Valuation:</span> <span className="font-bold text-cyan-400">${state.valuation.toLocaleString()}</span></div>
+                <div><span className="text-slate-500">Final Doom Meter:</span> <span className="font-bold text-purple-400">100.0%</span></div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                try {
+                  if (typeof window !== 'undefined') {
+                    localStorage.removeItem('ai_titan_silicon_empire_save_v1');
+                  }
+                } catch (e) {}
+                setState({ ...initialGameState, onboardingCompleted: false });
+                setActiveTab('DESK');
+              }}
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-slate-100 font-bold py-3 px-4 rounded-xl shadow-lg shadow-purple-950/40 text-center hover:opacity-95 cursor-pointer text-xs uppercase tracking-wider transition-all active:translate-y-px"
+            >
+              Reboot cluster simulation
+            </button>
+          </div>
+        </div>
+        </>
+      );
+    }
+
     return (
       <>
       <DesktopTitleBar onOpenSettings={() => setShowSettings(true)} />
@@ -770,7 +821,7 @@ export default function App() {
               </h1>
               <div className="text-[9px] text-cyan-400 font-mono tracking-widest leading-none uppercase font-bold flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                EXECUTIVE TERMINAL v1.2.4
+                EXECUTIVE TERMINAL v1.2.5
               </div>
             </div>
           </div>
@@ -826,6 +877,16 @@ export default function App() {
               </button>
             </div>
           </div>
+
+          {state.agiDoomMeter && state.agiDoomMeter > 0 ? (
+            <div className="bg-slate-900/60 border border-slate-850 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-inner backdrop-blur-md animate-pulse">
+              <span className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-ping shrink-0" />
+              <span className="text-[9px] font-mono text-purple-400 font-extrabold uppercase tracking-wider leading-none">AGI THREAT:</span>
+              <span className="text-[11px] font-mono font-black text-purple-300 leading-none">
+                {state.agiDoomMeter.toFixed(1)}%
+              </span>
+            </div>
+          ) : null}
         </div>
 
         {/* Quick capital indicators row */}
@@ -1817,24 +1878,130 @@ export default function App() {
 
       <KeynoteLiveModal state={state} updateState={updateState} addLogMessage={addLogMessage} />
 
+      {/* Slack alert direct message modal popup */}
+      <AnimatePresence>
+        {state.activeSlackChat && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            className="fixed bottom-14 right-6 w-96 bg-slate-900 border border-cyan-500/30 rounded-2xl p-5 shadow-2xl z-50 backdrop-blur-md"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-t-2xl" />
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/40 flex items-center justify-center font-black font-mono text-cyan-400 text-sm shadow-inner shrink-0">
+                {state.activeSlackChat.employeeName.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div className="space-y-1.5 flex-1 min-w-0">
+                <div className="flex justify-between items-baseline">
+                  <h4 className="text-xs font-black text-slate-100 truncate">{state.activeSlackChat.employeeName}</h4>
+                  <span className="text-[8px] font-mono font-bold text-cyan-500 uppercase tracking-widest">{state.activeSlackChat.role}</span>
+                </div>
+                <p className="text-xs text-slate-350 leading-relaxed font-sans select-text">
+                  "{state.activeSlackChat.message}"
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 mt-4">
+              {state.activeSlackChat.options.map((opt, i) => {
+                let isDisabled = false;
+                if (opt.actionId === 'SLACK_RESEARCH_FUND' && state.cash < 5000) isDisabled = true;
+                if (opt.actionId === 'SLACK_ALIGNMENT_PATCH' && (state.researchPoints || 0) < 8) isDisabled = true;
+                if (opt.actionId === 'SLACK_REPASTE_CORES' && state.cash < 3000) isDisabled = true;
+                if (opt.actionId === 'SLACK_LEGAL_COUNSEL' && state.cash < 8000) isDisabled = true;
+
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    disabled={isDisabled}
+                    onClick={() => {
+                      let nextCash = state.cash;
+                      let nextRP = state.researchPoints;
+                      let nextSentiment = state.globalPublicSentiment;
+                      let nextModels = [...state.trainedModels];
+                      let nextServers = [...(state.serverInstances || [])];
+
+                      if (opt.actionId === 'SLACK_RESEARCH_FUND') {
+                        nextCash -= 5000;
+                        nextRP += 12;
+                        addLogMessage(`🤝 WORKPLACE DIRECTIVE: Funded backend optimization research. -$5,000 cash, +12 Research Points!`, 'SYSTEM');
+                      } else if (opt.actionId === 'SLACK_ALIGNMENT_PATCH') {
+                        nextRP -= 8;
+                        const activeModelIndex = nextModels.findIndex(m => m.id === state.activeModelId);
+                        if (activeModelIndex !== -1) {
+                          nextModels[activeModelIndex] = {
+                            ...nextModels[activeModelIndex],
+                            safetyScore: Math.min(100, nextModels[activeModelIndex].safetyScore + 5)
+                          };
+                        }
+                        addLogMessage(`🛡️ WORKPLACE DIRECTIVE: Deployed diagnostic alignment patch. -8 Research Points, active model Safety increased!`, 'SYSTEM');
+                      } else if (opt.actionId === 'SLACK_REPASTE_CORES') {
+                        nextCash -= 3000;
+                        nextServers = nextServers.map(srv => ({ ...srv, condition: 100 }));
+                        addLogMessage(`⚙️ WORKPLACE DIRECTIVE: Serviced server thermal paste. -$3,000 cash, all cluster servers restored to 100% condition!`, 'SYSTEM');
+                      } else if (opt.actionId === 'SLACK_LEGAL_COUNSEL') {
+                        nextCash -= 8000;
+                        nextSentiment = Math.min(100, nextSentiment + 10);
+                        addLogMessage(`⚖️ WORKPLACE DIRECTIVE: Hired legal compliance counsel. -$8,000 cash, public sentiment increased (+10)!`, 'SYSTEM');
+                      } else {
+                        addLogMessage(`💬 WORKPLACE DIRECTIVE: Dismissed direct message request from ${state.activeSlackChat?.employeeName}.`, 'SYSTEM');
+                      }
+
+                      updateState({
+                        cash: parseFloat(nextCash.toFixed(2)),
+                        researchPoints: nextRP,
+                        globalPublicSentiment: parseFloat(nextSentiment.toFixed(2)),
+                        trainedModels: nextModels,
+                        serverInstances: nextServers,
+                        activeSlackChat: null
+                      });
+                      playSound('click');
+                    }}
+                    className="w-full bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-cyan-800/40 text-slate-200 hover:text-white font-extrabold text-[10px] py-2 px-3 rounded-xl transition-all cursor-pointer disabled:opacity-30 disabled:hover:border-slate-850 text-left"
+                  >
+                    {opt.text}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Footer credits and copyright details */}
       <footer className="h-10 bg-slate-950 border-t border-slate-900/60 text-slate-500 px-6 flex items-center justify-between shrink-0 overflow-hidden font-mono text-[9px] select-none uppercase font-bold relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent pointer-events-none" />
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 shrink-0 z-10 bg-slate-950 pr-4">
           <div className="text-[9px] font-bold uppercase flex items-center gap-1.5 text-cyan-500/80">
             <span className="inline-block w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping"></span>
-            SYSTEM ACCESS GRID SECURED
-          </div>
-          <div className="hidden md:block text-[9px] tracking-wider text-slate-600">
-            PUE: 1.05 | MEMORY SWARM: 4.2PB | LATENCY: 2.1ms
+            LIVE ACCESS GRID
           </div>
         </div>
-        <div className="flex gap-4">
-          <div className="hidden lg:block text-[9px] tracking-tight text-slate-600 italic">
-            "SPEED IS THE ONLY DEFENSE" - Alexis Mercer
+
+        {/* Scrolling Ticker */}
+        <div className="flex-1 overflow-hidden relative mx-4 select-none pointer-events-none">
+          <div className="flex gap-16 whitespace-nowrap animate-ticker">
+            <span>🌐 NETWORK COMPILERS ACTIVE</span>
+            <span className="text-cyan-400 font-extrabold">📈 VALUATION: ${state.valuation.toLocaleString()}</span>
+            <span>⚡ POWER GRID STABILITY: {state.powerGridStability ?? 100}%</span>
+            <span className={state.cash < 0 ? "text-red-400" : "text-emerald-400"}>💰 RESERVE: ${state.cash.toLocaleString()}</span>
+            {state.competitors?.map(comp => (
+              <span key={comp.id} className="text-slate-400">
+                🏢 {comp.name}: {comp.leadModelName || 'N/A'} (Score: {comp.leadModelScore}%) | Market Share: {comp.marketShare}%
+              </span>
+            ))}
+            {state.activeCrisis ? (
+              <span className="text-rose-400 animate-pulse">🚨 CURRENT CRISIS: {state.activeCrisis.replace('_', ' ')}</span>
+            ) : null}
+            <span>🔋 DATASTREAM: INTERCONNECT AT 10.4 TB/S</span>
           </div>
-          <div className="text-[9px] text-slate-600 px-2 border-l border-slate-900">
-            SILICON_EMPIRE_v1.2.4
+        </div>
+
+        <div className="flex gap-4 shrink-0 z-10 bg-slate-950 pl-4">
+          <div className="text-[9px] text-slate-650 px-2 border-l border-slate-900">
+            SILICON_EMPIRE_v1.2.5
           </div>
         </div>
       </footer>
