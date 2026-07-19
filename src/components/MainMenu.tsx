@@ -21,8 +21,9 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
     slot2: null,
     slot3: null,
   });
-  const [updateCheckStatus, setUpdateCheckStatus] = useState<'IDLE' | 'CHECKING' | 'DONE'>('IDLE');
+  const [updateCheckStatus, setUpdateCheckStatus] = useState<'IDLE' | 'CHECKING' | 'DONE' | 'UPDATING'>('IDLE');
   const [updateMsg, setUpdateMsg] = useState("");
+  const [updateAvailable, setUpdateAvailable] = useState(false);
 
   // Interactive settings state (stored in local options)
   const [musicVolume, setMusicVolume] = useState(70);
@@ -471,9 +472,11 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
                             const count = parts[1];
                             const changelog = parts[2] || "";
                             setUpdateCheckStatus('DONE');
-                            setUpdateMsg(`⚠ NEW UPDATE DETECTED: Local branch is ${count} commit(s) behind remote repository.\n\nLatest commits:\n${changelog}\n\nPlease run 'git pull' to apply this update.`);
+                            setUpdateAvailable(true);
+                            setUpdateMsg(`⚠ NEW UPDATE DETECTED: Local branch is ${count} commit(s) behind remote repository.\n\nLatest commits:\n${changelog}\n\nClick the button below to apply this update.`);
                           } else {
                             setUpdateCheckStatus('DONE');
+                            setUpdateAvailable(false);
                             setUpdateMsg("✔ UP TO DATE: Local branch is fully aligned with origin/main. You are running the latest code.");
                           }
                           return;
@@ -497,8 +500,10 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
                         setTimeout(() => {
                           setUpdateCheckStatus('DONE');
                           if (remoteVersion !== localVersion) {
-                            setUpdateMsg(`⚠ NEW UPDATE DETECTED: Version v${remoteVersion} is available!\n\nPlease pull latest changes from your GitHub repository to update.`);
+                            setUpdateAvailable(true);
+                            setUpdateMsg(`⚠ NEW UPDATE DETECTED: Version v${remoteVersion} is available!\n\nClick the button below to apply this update.`);
                           } else {
+                            setUpdateAvailable(false);
                             setUpdateMsg(`✔ UP TO DATE: You are running the latest version (v${localVersion}). Grid is secure.`);
                           }
                         }, 1000);
@@ -557,6 +562,28 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
                   </div>
                 </div>
               </div>
+
+              {updateAvailable && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setUpdateCheckStatus('UPDATING');
+                    setUpdateMsg("APPLYING GIT UPDATE AND SYNCING CODEBASE...");
+                    try {
+                      const result = await invoke<string>('apply_git_update');
+                      setUpdateCheckStatus('DONE');
+                      setUpdateAvailable(false);
+                      setUpdateMsg(`✔ UPDATE SUCCESSFUL!\n\n${result}\n\nPlease reload or restart the application to apply the changes.`);
+                    } catch (err: any) {
+                      setUpdateCheckStatus('DONE');
+                      setUpdateMsg(`❌ UPDATE FAILED: ${err.message || err}`);
+                    }
+                  }}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-slate-100 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow-md mb-2 animate-bounce text-center"
+                >
+                  ⚡ Install Update
+                </button>
+              )}
 
               <button
                 type="button"

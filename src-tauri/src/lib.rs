@@ -115,6 +115,29 @@ fn check_for_git_updates() -> Result<String, String> {
     }
 }
 
+#[tauri::command]
+fn apply_git_update() -> Result<String, String> {
+    use std::process::Command;
+
+    // Run git pull origin main
+    let output = Command::new("git")
+        .args(&["pull", "origin", "main"])
+        .output();
+
+    match output {
+        Ok(out) => {
+            if out.status.success() {
+                let stdout = String::from_utf8_lossy(&out.stdout).to_string();
+                Ok(stdout)
+            } else {
+                let stderr = String::from_utf8_lossy(&out.stderr).to_string();
+                Err(format!("Git pull failed: {}", stderr))
+            }
+        }
+        Err(e) => Err(format!("Failed to execute git command: {}", e)),
+    }
+}
+
 // API Key management
 #[tauri::command]
 fn get_api_key(app_handle: tauri::AppHandle) -> String {
@@ -884,7 +907,8 @@ pub fn run() {
         call_social_reply,
         generate_user_reply,
         generate_social_feed,
-        check_for_git_updates
+        check_for_git_updates,
+        apply_git_update
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
