@@ -453,7 +453,7 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
               <div className="bg-slate-950/50 p-4 border border-slate-850 rounded-2xl space-y-4 font-mono text-[10px] shadow-inner text-left">
                 <div className="flex justify-between items-center border-b border-slate-900 pb-2">
                   <span>CURRENT REPOSITORY VERSION:</span>
-                  <span className="text-cyan-400 font-extrabold">v1.2.4</span>
+                  <span className="text-cyan-400 font-extrabold">v1.2.5</span>
                 </div>
 
                 <div className="space-y-2">
@@ -536,7 +536,11 @@ export default function MainMenu({ onStartNewGame, onLoadGame }: MainMenuProps) 
                   <span className="text-slate-500 block uppercase tracking-wider text-[8px] font-bold">RELEASE NOTES HISTORY</span>
                   <div className="h-[140px] overflow-y-auto pr-1 space-y-3.5 border-t border-slate-900/60 pt-2 scrollbar-thin text-slate-350 leading-relaxed text-[9.5px]">
                     <div>
-                      <span className="text-cyan-400 font-black">v1.2.4 (Latest)</span>
+                      <span className="text-cyan-400 font-black">v1.2.5 (Latest)</span>
+                      <p className="mt-1 font-sans text-slate-400">Added global AGI Singularity containment threat index, warning indicators, and compliance hotline options. Integrated live scrolling news footer and interactive employee chat logs.</p>
+                    </div>
+                    <div>
+                      <span className="text-cyan-400 font-black">v1.2.4</span>
                       <p className="mt-1 font-sans text-slate-400">Added multiple Manual Save Slots (1, 2, and 3) allowing slot saving and loading from main menu/gameplay. Integrated dynamic Update Checker & game Changelog history tab. Fixed Gemini REST API endpoint fallbacks to use gemini-2.5-flash instead of non-existent models.</p>
                     </div>
                     <div>
